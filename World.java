@@ -3,35 +3,29 @@ import java.awt.Graphics;
 class World {
 	int height;
 	int width;
-
-	int numSpheres;
-	Sphere spheres[];
-	
-	public World(int initWidth, int initHeight, int initNumSpheres) {
+	Sphere sphere;
+	Paddle p1;
+	Paddle p2;
+	public World(int initWidth, int initHeight) {
 		width = initWidth;
 		height = initHeight;
-
-		numSpheres = initNumSpheres;
-		spheres = new Sphere[numSpheres];
-
-		for (int i = 0; i < numSpheres; i++) {
-			spheres[i] = new Sphere();
-		}
-
-	}
-	public void drawPaddles(Graphics g) {
-		
+		sphere = new Sphere();
+		p1 = new Paddle();
+		p2 = new Paddle();
 	}
 
-	public void drawSpheres(Graphics g) {
-		for (int i = 0; i < numSpheres; i++) {
-			spheres[i].draw(g);
-		}
+	public void drawSphere(Graphics g) {
+		sphere.draw(g);
 	}
-
-	public void updateSpheres(double time) {
-		for (int i = 0; i < numSpheres; i++)
-			spheres[i].update(this, time);
+	public void updateSphere(double time) {
+		sphere.update(this, time);
 	}
-
+	public void drawPaddle(Graphics g) {
+		p1.draw(g);
+		p2.draw(g);
+	}
+	public void updatePaddle(double time) {
+		p1.update(this, time);
+		p2.update(this, time);
+	}
 }

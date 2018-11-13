@@ -16,7 +16,8 @@ public class Pong extends JPanel implements KeyListener {
 	class Runner implements Runnable {
 		public void run() {
 			while (true) {
-				world.updateSpheres(1.0 / (double) FPS);
+				world.updateSphere(1.0 / (double) FPS);
+				world.updatePaddle(1.0 / (double) FPS);
 				repaint();
 				try {
 					Thread.sleep(1000 / FPS);
@@ -28,65 +29,58 @@ public class Pong extends JPanel implements KeyListener {
 
 	public void keyPressed(KeyEvent e) {
 		char c = e.getKeyChar();
+
 		System.out.println("You pressed down: " + c);
-		if (c == 'w') {
-			for (int i = 0; i < world.numSpheres; i++) {
-				Sphere s = world.spheres[i];
-				Pair acceleration = s.acceleration;
-				if (acceleration.y == 0) {
-					acceleration.y = acceleration.x;
-					acceleration.x = 0;
-				}
-				if (acceleration.y > 0) {
-					acceleration.flipY();
-				}
+		if (c == 'r') {
+			if (world.p1.velocity.y == 0) {
+				world.p1.velocity.y = 5;
+			}
+			if (world.p1.velocity.y > 0) {
+				world.p1.velocity.flipY();
 			}
 		}
-		if (c == 's') {
-			for (int i = 0; i < world.numSpheres; i++) {
-				Sphere s = world.spheres[i];
-				Pair acceleration = s.acceleration;
-				if (acceleration.y == 0) {
-					acceleration.y = acceleration.x;
-					acceleration.x = 0;
-				}
-				if (acceleration.y < 0) {
-					acceleration.flipY();
-				}
+		if (c == 'v') {
+			if (world.p1.velocity.y == 0) {
+				world.p1.velocity.y = 5;
+			}
+			if (world.p1.velocity.y < 0) {
+				world.p1.velocity.flipY();
 			}
 		}
-		if (c == 'a') {
-			for (int i = 0; i < world.numSpheres; i++) {
-				Sphere s = world.spheres[i];
-				Pair acceleration = s.acceleration;
-				if (acceleration.x == 0) {
-					acceleration.x = acceleration.y;
-					acceleration.y = 0;
-				}
-				if (acceleration.x > 0) {
-					acceleration.flipX();
-				}
+		if (c == 'f') {
+			world.p1.velocity.y = 0;
+		}
+		if (c == 'u') {
+			if (world.p2.velocity.y == 0) {
+				world.p2.velocity.y = 5;
+			}
+			if (world.p2.velocity.y > 0) {
+				world.p2.velocity.flipY();
 			}
 		}
-		if (c == 'd') {
-			for (int i = 0; i < world.numSpheres; i++) {
-				Sphere s = world.spheres[i];
-				Pair acceleration = s.acceleration;
-				if (acceleration.x == 0) {
-					acceleration.x = acceleration.y;
-					acceleration.y = 0;
-				}
-				if (acceleration.x < 0) {
-					acceleration.flipX();
-				}
+		if (c == 'n') {
+			if (world.p2.velocity.y == 0) {
+				world.p2.velocity.y = 5;
+			}
+			if (world.p2.velocity.y < 0) {
+				world.p2.velocity.flipY();
 			}
 		}
+		if (c == 'j') {
+			world.p2.velocity.y = 0;
+		}
+
 	}
 
 	public void keyReleased(KeyEvent e) {
 		char c = e.getKeyChar();
 		System.out.println("\tYou let go of: " + c);
-
+		if (c == 'w') {
+			world.p1.velocity.y = 0;
+		}
+		if (c == 's') {
+			world.p1.velocity.y = 0;
+		}
 	}
 
 	public void keyTyped(KeyEvent e) {
@@ -100,7 +94,7 @@ public class Pong extends JPanel implements KeyListener {
 	}
 
 	public Pong() {
-		world = new World(WIDTH, HEIGHT, 1);
+		world = new World(WIDTH, HEIGHT);
 		addKeyListener(this);
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		Thread mainThread = new Thread(new Runner());
@@ -121,9 +115,10 @@ public class Pong extends JPanel implements KeyListener {
 
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
-
-		world.drawSpheres(g);
-
+		g.setColor(Color.WHITE);
+		g.fillRect(WIDTH / 2, 0, 4, HEIGHT);
+		world.drawSphere(g);
+		world.drawPaddle(g);
 	}
 
 }

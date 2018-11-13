@@ -2,21 +2,33 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Paddle {
-	private static final int length = 10;
-	private static final int width = 5;
-	private static final int velocityY = 10;
+    final int length = 100;
+	final int width = 5;
+    Pair velocity = new Pair(0, 0);
+	private static int paddleNumber = 1;
 	Pair position;
 
-
 	public Paddle() {
-		this.position = new Pair(15, 15);
+		if (paddleNumber == 1) {
+			this.position = new Pair(5, 15);
+		} else {
+			this.position = new Pair(1014, 15);
+		}
+		paddleNumber++;
 	}
-	
 	public void draw(Graphics g) {
-		Color c = g.getColor();
-
-		g.setColor(c);
-		g.fillRect((int) position.x, (int) position.y, length, width);
-		g.setColor(c);
+		g.fillRect((int) position.x, (int) position.y, width, length);
+		g.setColor(Color.WHITE);
+	}
+	public void update(World w, double time) {
+		position = position.add(velocity);
+		move(w);
+	}
+	public void move(World w) {
+		if(position.y + length >= w.height) {
+			velocity.flipY();
+		}else if(position.y == 0) {
+			velocity.flipY();
+		}
 	}
 }
